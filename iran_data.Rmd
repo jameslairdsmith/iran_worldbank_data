@@ -111,11 +111,15 @@ first_year_full_format(my_breaks)
 ```{r}
 simple_iran_indicators %>% 
   filter(year > make_date(year = 2008)) %>% 
-  mutate(year = year + years(1)) %>% 
+  mutate(year = year + years(1),
+         new_indicator_type = if_else(!is.na(indicator_type),
+                                      "estimate_or_forecast",
+                                      NA_character_)) %>% 
   ggplot(aes(x = year, 
              y = annual_gdp_growth)) +
   geom_col(fill = "grey45") +
-  geom_vline(xintercept = dmy("24/11/2013"), 
+  geom_vline(#xintercept = dmy("24/11/2013"), 
+             xintercept = dmy("16/01/2016"), 
              color = "grey",
              linetype = 5) +
   geom_vline(xintercept = dmy("01/11/2018"), 
@@ -125,12 +129,16 @@ simple_iran_indicators %>%
                 xmax=ceiling_date(year, unit = "year")  - days(183),
                 ymin=-Inf,
                 ymax=Inf,
-                fill=indicator_type), alpha=0.2) +
-  scale_fill_manual(name = "", 
-                    values=c("black", "blue"),
-                    limits = c("estimate", "forecast"),
-                    label=c("Estimate",
-                             "Forecast")) +
+                fill=new_indicator_type), alpha=0.2) +
+  # scale_fill_manual(name = "", 
+  #                   values=c("black", "blue"),
+  #                   limits = c("estimate", "forecast"),
+  #                   label=c("Estimate",
+  #                            "Forecast")) +
+  scale_fill_manual(name = "",
+                    values=c("black"),
+                    limits = c("estimate_or_forecast"),
+                    label=c("Estimate & forecast")) +
   theme_minimal() +
   scale_x_date(labels = first_year_full_format,
                #date_breaks = "1 year",
@@ -140,12 +148,46 @@ simple_iran_indicators %>%
                ) +
   labs(
     subtitle = "Real GDP growth, annual %",
-    title = "Iran's economy is batterd by sanctions",
+    title = "Iran's economy: batterd by sanctions",
     y = NULL,
     x = "\nFiscal year ending",
-    caption = "Source: World Bank"
+    caption = "\nData and forecast source: World Bank"
   ) +
-  theme(panel.grid = element_blank()) #+
+  theme(panel.grid = element_blank(),
+        plot.caption = element_text(hjust = 0,
+                                    size = 8,
+                                    color = "grey25"),
+        legend.position = "none") +
+  # annotate("text",
+  #          x = make_date(2019) + days(220), 
+  #          size = 2.5,
+  #          y = 10, 
+  #          label = "Estimated*") +
+  # annotate("text",
+  #          x = make_date(2021) + days(183), 
+  #          size = 2.5,
+  #          y = 10, 
+  #          label = "Forecast*") +
+  annotate("text",
+           x = make_date(2021) - days(150),
+           size = 2.5,
+           y = 10,
+           label = "Estimated\nor\nforecast") +
+  annotate("text",
+           x = make_date(2016) - days(900),
+           y = 10,
+           size = 2.5,
+           label = "Nuclear deal implemented \u2192") +
+  annotate("text",
+           x = make_date(2017) + days(150),
+           y = -7.5,
+           size = 2.5,
+           label = "Sanctions\nre-imposed") +
+  annotate("text",
+           x = make_date(2017) + days(550),
+           y = -7.5,
+           size = 2.5,
+           label = "\u2192")
   #geom_hline(yintercept = 0, color = "black",)
 ```
 
