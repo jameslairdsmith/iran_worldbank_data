@@ -114,8 +114,13 @@ simple_iran_indicators %>%
   mutate(year = year + years(1)) %>% 
   ggplot(aes(x = year, 
              y = annual_gdp_growth)) +
-  geom_col() +
-  geom_vline(xintercept = dmy("24/11/2013"), color = "red") +
+  geom_col(fill = "grey45") +
+  geom_vline(xintercept = dmy("24/11/2013"), 
+             color = "grey",
+             linetype = 5) +
+  geom_vline(xintercept = dmy("01/11/2018"), 
+             color = "grey",
+             linetype = 5) +
   geom_rect(aes(xmin=floor_date(year, unit = "year") - days(183),
                 xmax=ceiling_date(year, unit = "year")  - days(183),
                 ymin=-Inf,
@@ -137,8 +142,10 @@ simple_iran_indicators %>%
     subtitle = "Real GDP growth, annual %",
     title = "Iran's economy is batterd by sanctions",
     y = NULL,
-    x = "\nFiscal year ending"
+    x = "\nFiscal year ending",
+    caption = "Source: World Bank"
   ) +
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank()) #+
+  #geom_hline(yintercept = 0, color = "black",)
 ```
 
