@@ -1,0 +1,97 @@
+---
+title: "Iran World Bank Data"
+output: NA
+---
+
+
+
+```{r setup}
+library(tidyverse)
+library(janitor)
+library(lubridate)
+```
+
+
+```{r}
+iran_indicators <- 
+  read_csv("data/API_IRN_DS2_en_csv_v2_437822.csv", skip = 3) %>% 
+  clean_names() %>% 
+  select(-x65) %>% 
+  gather(-country_name,
+         -country_code,
+         -indicator_name,
+         -indicator_code,
+         key = "year",
+         value = "indicator_value") %>% 
+  mutate(year = str_remove(year, "x"),
+         year = as.integer(year)) %>% 
+  filter(!is.na(indicator_value))
+
+iran_indicators
+```
+
+```{r}
+iran_indicators %>% 
+  distinct(indicator_name) %>% 
+  # filter(indicator_name %in% c("Inflation, consumer prices (annual %)",
+  #                              #"GDP (current US$)",
+  #                              "GDP growth (annual %)")) #%>%
+  filter(str_detect(indicator_name, "GDP"))
+```
+
+```{r}
+iran_indicators %>% 
+  filter(indicator_name == "GDP growth (annual %)")
+```
+
+```{r}
+additions_to_iran_stats <-
+  tribble(~country_name, ~country_code, ~year, ~annual_inflation,
+        ~annual_gdp_growth, ~ indicator_type,
+        "Iran, Islamic Rep.", "IRN", make_date(2018), 29.9, -4.9, "estimate",
+        "Iran, Islamic Rep.", "IRN", make_date(2019), 38.3, -8.7, "estimate",
+        "Iran, Islamic Rep.", "IRN", make_date(2020), 29.0, 0.1, "forecast",
+        "Iran, Islamic Rep.", "IRN", make_date(2021), 22.7, 1, "forecast")
+
+additions_to_iran_stats
+```
+
+
+```{r}
+simple_iran_indicators <- 
+  iran_indicators %>% 
+  filter(indicator_name %in% c("Inflation, consumer prices (annual %)",
+                               "GDP growth (annual %)")) %>% 
+  mutate(simple_indicator_name = case_when(
+    str_detect(indicator_name, "GDP") ~ "annual_gdp_growth",
+    str_detect(indicator_name, "Inflation") ~ "annual_inflation"
+  )) %>% 
+  select(-indicator_name,
+         -indicator_code) %>% 
+  pivot_wider(names_from = simple_indicator_name,
+              values_from = indicator_value) %>% 
+  mutate(year = make_date(year = year),
+         indicator_type = "real") %>% 
+  bind_rows(additions_to_iran_stats)
+
+simple_iran_indicators
+```
+
+
+
+
+```{r}
+simple_iran_indicators %>% 
+  filter(year > make_date(year = 2008)) %>%
+  ggplot(aes(x = year, 
+             y = annual_gdp_growth,
+             fill = indicator_type)) +
+  geom_col() +
+  geom_vline(xintercept = dmy("24/11/2013")) +
+  geom_rect(aes(xmin=year,
+                xmax=ceiling_date(year, unit = "year"),
+                ymin=-12,
+                ymax=13,
+                fill=indicator_type), alpha=0.2)
+```
+
