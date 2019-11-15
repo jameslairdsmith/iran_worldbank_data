@@ -71,27 +71,74 @@ simple_iran_indicators <-
   pivot_wider(names_from = simple_indicator_name,
               values_from = indicator_value) %>% 
   mutate(year = make_date(year = year),
-         indicator_type = "real") %>% 
+         indicator_type = NA_character_) %>% 
   bind_rows(additions_to_iran_stats)
 
 simple_iran_indicators
 ```
 
 
+```{r}
+my_date_format <- function()
+{
+   function(x)
+   {
+       #m <- format(x,"%b")
+       year_full <- format(x,"%Y")
+       year_short <- format(x,"%y")
+       ifelse(duplicated(year_full), year_short, year_full)
+   }
+}
+```
+
+```{r}
+first_year_full_format <- function(breaks){
+  out_vec <- vector(mode = "character", length = length(breaks))
+  
+  out_vec[1] <- format(breaks[1],"%Y")
+  out_vec[2:length(breaks)] <- format(breaks[2:length(breaks)], "%y")
+  out_vec
+}
+```
+
+```{r}
+my_breaks <- dmy("01/01/2009") + years(1:13)
+
+first_year_full_format(my_breaks)
+```
 
 
 ```{r}
 simple_iran_indicators %>% 
-  filter(year > make_date(year = 2008)) %>%
+  filter(year > make_date(year = 2008)) %>% 
+  mutate(year = year + years(1)) %>% 
   ggplot(aes(x = year, 
-             y = annual_gdp_growth,
-             fill = indicator_type)) +
+             y = annual_gdp_growth)) +
   geom_col() +
-  geom_vline(xintercept = dmy("24/11/2013")) +
-  geom_rect(aes(xmin=year,
-                xmax=ceiling_date(year, unit = "year"),
-                ymin=-12,
-                ymax=13,
-                fill=indicator_type), alpha=0.2)
+  geom_vline(xintercept = dmy("24/11/2013"), color = "red") +
+  geom_rect(aes(xmin=floor_date(year, unit = "year") - days(183),
+                xmax=ceiling_date(year, unit = "year")  - days(183),
+                ymin=-Inf,
+                ymax=Inf,
+                fill=indicator_type), alpha=0.2) +
+  scale_fill_manual(name = "", 
+                    values=c("black", "blue"),
+                    limits = c("estimate", "forecast"),
+                    label=c("Estimate",
+                             "Forecast")) +
+  theme_minimal() +
+  scale_x_date(labels = first_year_full_format,
+               #date_breaks = "1 year",
+               breaks = my_breaks,
+               #expand = c(0,0),
+               #limits = c(make_date(2008) + months(1), make_date(2022))
+               ) +
+  labs(
+    subtitle = "Real GDP growth, annual %",
+    title = "Iran's economy is batterd by sanctions",
+    y = NULL,
+    x = "\nFiscal year ending"
+  ) +
+  theme(panel.grid = element_blank())
 ```
 
