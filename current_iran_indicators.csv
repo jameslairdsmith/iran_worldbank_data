@@ -1,0 +1,14 @@
+country_name,country_code,year,annual_inflation,annual_gdp_growth,indicator_type,new_indicator_type
+"Iran, Islamic Rep.",IRN,2010-01-01,13.5515548281506,1.00738545790536,NA,NA
+"Iran, Islamic Rep.",IRN,2011-01-01,10.089362928798,5.79793830169417,NA,NA
+"Iran, Islamic Rep.",IRN,2012-01-01,20.8693375229118,2.64571791806476,NA,NA
+"Iran, Islamic Rep.",IRN,2013-01-01,25.736568457539,-7.4445570297602,NA,NA
+"Iran, Islamic Rep.",IRN,2014-01-01,39.2660234321157,-0.194073471015827,NA,NA
+"Iran, Islamic Rep.",IRN,2015-01-01,17.2213287145862,4.60341887988824,NA,NA
+"Iran, Islamic Rep.",IRN,2016-01-01,13.6992084432717,-1.32064511973337,NA,NA
+"Iran, Islamic Rep.",IRN,2017-01-01,8.65125777406479,13.3962444619863,NA,NA
+"Iran, Islamic Rep.",IRN,2018-01-01,9.98718496369076,3.75518736694957,NA,NA
+"Iran, Islamic Rep.",IRN,2019-01-01,29.9,-4.9,estimate,estimate_or_forecast
+"Iran, Islamic Rep.",IRN,2020-01-01,38.3,-8.7,estimate,estimate_or_forecast
+"Iran, Islamic Rep.",IRN,2021-01-01,29,0.1,forecast,estimate_or_forecast
+"Iran, Islamic Rep.",IRN,2022-01-01,22.7,1,forecast,estimate_or_forecast
