@@ -107,15 +107,26 @@ my_breaks <- dmy("01/01/2009") + years(1:13)
 first_year_full_format(my_breaks)
 ```
 
-
 ```{r}
-iran_gdp_chart <-
+recent_iran_indicators <- 
   simple_iran_indicators %>% 
   filter(year > make_date(year = 2008)) %>% 
   mutate(year = year + years(1),
          new_indicator_type = if_else(!is.na(indicator_type),
                                       "estimate_or_forecast",
-                                      NA_character_)) %>% 
+                                      NA_character_)) 
+
+recent_iran_indicators
+```
+
+```{r}
+recent_iran_indicators %>% 
+  write_csv("current_iran_indicators.csv")
+```
+
+
+```{r}
+recent_iran_indicators %>% 
   ggplot(aes(x = year, 
              y = annual_gdp_growth)) +
   geom_col(fill = "grey45") +
