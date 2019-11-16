@@ -109,7 +109,8 @@ first_year_full_format(my_breaks)
 
 
 ```{r}
-simple_iran_indicators %>% 
+iran_gdp_chart <-
+  simple_iran_indicators %>% 
   filter(year > make_date(year = 2008)) %>% 
   mutate(year = year + years(1),
          new_indicator_type = if_else(!is.na(indicator_type),
@@ -189,5 +190,17 @@ simple_iran_indicators %>%
            size = 2.5,
            label = "\u2192")
   #geom_hline(yintercept = 0, color = "black",)
+
+iran_gdp_chart
 ```
+
+```{r}
+# ggsave(iran_gdp_chart,
+#        filename = "iran_gdp_chart.png",
+#        bg = "transparent",
+#        height = 12,
+#        width = 16,
+#        units = "cm")
+```
+
 
