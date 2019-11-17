@@ -1,73 +1,51 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "description": "A simple bar chart with embedded data.",
-  "data": {
-    "url": "https://raw.githubusercontent.com/jameslairdsmith/iran_worldbank_data/master/current_iran_indicators.csv"
-  },
+  "data": {"url": "https://raw.githubusercontent.com/jameslairdsmith/iran_worldbank_data/master/current_iran_indicators.csv"},
   "width": 500,
   "height": 500,
   "config": {
-    "bar": {
-      "continuousBandSize": 30
-    }
+        "bar": {"continuousBandSize":30}
   },
   "layer": [
-    {
-      "mark": "bar",
-      "encoding": {
-        "x": {
-          "field": "year",
-          "type": "temporal",
-          "scale": {
-            "domain": [
-              "2010",
-              "2022"
-            ]
-          },
-          "axis": {
-            "format": "%y",
-            "title": "Year ending",
-            "grid": false
-          }
-        },
-        "y": {
-          "field": "annual_gdp_growth",
-          "title": null,
-          "type": "quantitative"
+  {"mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "year", 
+      "type": "temporal",
+      "scale": {"domain": ["2010","2022"]},
+      "axis": {
+        "format":"%y",
+        "title": "Year ending", 
+        "grid":false
         }
-      }
     },
-    {
-      "mark": "text",
-      "data": {
-        "values": [
-          {
-            "xpos": "2020",
-            "ypos": "9"
-          }
-        ],
-        "format": {
-          "parse": {
-            "xpos": "date:'%Y'"
-          }
+    "y": {
+      "field": "annual_gdp_growth", 
+      "title": null,
+      "type": "quantitative"}
+  }
+},
+{
+  "mark" : "text",
+  "data" : {
+    "values": [{"xpos":"2020", "ypos":"9"}],
+     "format": {
+          "parse": {"xpos": "date:'%Y'"}
         }
-      },
-      "encoding": {
+    },
+  "encoding": {
         "x": {
           "field": "xpos",
           "type": "temporal"
         },
-        "text": {
-          "value": "Estimates"
-        },
+        "text": {"value":"Estimates"},
         "y": {
           "field": "ypos",
           "type": "quantitative"
-        }
-      }
-    },
-    {
-      "mark": "rect",
+        }}
+},
+ {"mark": "rect",
       "data": {
         "values": [
           {
@@ -84,8 +62,8 @@
         "format": {
           "parse": {
             "start": "date:'%Y-%m-%d'",
-            "end": "date:'%Y-%m-%d'"
-          }
+             "end": "date:'%Y-%m-%d'"
+             }
         }
       },
       "encoding": {
@@ -98,13 +76,11 @@
           "type": "temporal"
         },
         "color": {
-          "field": "event",
+          "field" : "event", 
           "type": "nominal",
           "legend": null
-        },
-        "opacity": {
-          "value": 0.2
-        }
+          } ,
+        "opacity": {"value": 0.2}
       }
     }
   ]
